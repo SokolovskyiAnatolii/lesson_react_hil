@@ -1,13 +1,13 @@
 import React from "react";
 
-import Table from "./components/Table/Table";
+import Container from "@mui/material/Container";
 
-import { todos } from "./data/mockData";
+import Table from "./components/Table/Table";
 
 export default function App() {
   return (
-    <div className="App">
-      <Table color="white" list={todos} />
-    </div>
+    <Container>
+      <Table color="white" listName="todos" />
+    </Container>
   );
 }
