@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -14,9 +14,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 
 import "./style.sass";
+import TableColorPicker from "../contexts/TableColorPicker";
 
-export default function Table({ color, listName }) {
+export default function Table({ listName }) {
   const [list, setList] = useState([]);
+  const { color, setColor } = useContext(TableColorPicker);
 
   const hendleItemDelete = async (id) => {
     try {
@@ -85,7 +87,7 @@ export default function Table({ color, listName }) {
               <TableCell>{item.title}</TableCell>
               <TableCell>
                 <Checkbox
-                  defaultChecked={item.completed}
+                  checked={item.completed}
                   onChange={() => handleItemCompleted(item)}
                 />
               </TableCell>
@@ -94,6 +96,7 @@ export default function Table({ color, listName }) {
                   edge="end"
                   aria-label="delete"
                   onClick={() => hendleItemDelete(item.id)}
+                  style={{ color: color }}
                 >
                   <DeleteIcon />
                 </IconButton>
