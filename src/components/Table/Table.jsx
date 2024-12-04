@@ -14,7 +14,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 
 import "./style.sass";
+
 import TableColorPicker from "../contexts/TableColorPicker";
+
+import todo from "../../services/todo";
 
 export default function Table({ listName }) {
   const [list, setList] = useState([]);
@@ -22,9 +25,7 @@ export default function Table({ listName }) {
 
   const hendleItemDelete = async (id) => {
     try {
-      await fetch(`https://jsonplaceholder.typicode.com/${listName}/${id}`, {
-        method: `DELETE`,
-      });
+      await todo.delete(listName, id);
       setList(list.filter((item) => item.id !== id));
     } catch (err) {
       console.log(err);
@@ -33,17 +34,9 @@ export default function Table({ listName }) {
 
   const handleItemCompleted = async (item) => {
     try {
-      let request = await fetch(
-          `https://jsonplaceholder.typicode.com/${listName}/${item.id}`,
-          {
-            method: `PATCH`,
-            body: JSON.stringify({ completed: !item.completed }),
-            headers: {
-              "Content-type": "application/json",
-            },
-          }
-        ),
-        response = await request.json();
+      let response = await todo.patch(listName, item.id, {
+        completed: !item.completed,
+      });
 
       setList(
         list.map((el) => {
@@ -59,10 +52,7 @@ export default function Table({ listName }) {
 
   useEffect(() => {
     (async () => {
-      let request = await fetch(
-          `https://jsonplaceholder.typicode.com/${listName}`
-        ),
-        response = await request.json();
+      let response = await todo.get(listName);
       setList(response.slice(0, 10));
     })();
   }, []);
